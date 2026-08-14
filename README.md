@@ -1,6 +1,6 @@
 # Bve_MQTT_arduino_opta
 
-[Bve_MQTT_IO](https://github.com/yukinoshitaworks/Bve_MQTT_IO)(BVE Trainsim 用 MQTT 連携プラグイン)が発行する MQTT トピックを購読し、**Arduino Opta** + 拡張モジュール(D1608S / Solid State)の物理リレーへ反映するファームウェアです。BVE の運転状況(ATS-P表示灯・知らせ灯など)を、実物のパイロットランプやリレー出力として再現します。
+[Bve_MQTT_IO](https://github.com/yukinoshitaworks/Bve_MQTT_IO)(BVE Trainsim 用 MQTT 連携プラグイン)が発行する MQTT トピックを購読し、**Arduino Opta** + 拡張モジュール(D1608S / Solid State)の物理リレーへ反映するファームウェアです。BVE の運転状況(ATS-P表示灯・知らせ灯など)を、実物のパイロットランプやリレー出力として再現します。Bve trainsim 5.8.7554.391およびBveEX2.0.50428.1上でデフォルトの内房線/E217系で動作することを確認しています。
 
 ## 対応関係
 
