@@ -17,6 +17,7 @@ BVE (Bve_MQTT_IOプラグイン)  --MQTT-->  Arduino Opta (本スケッチ)  --I
 - BveをプレイするWindows PC([mosquitto](https://mosquitto.org/download/)のインストールによるMQTTブローカーの構築が必要です)。[Node-RED Dashboard](https://github.com/yukinoshitaworks/Bve_Node-RED_Dashboard)の構築も併せてご参照ください。
 - Arduino Opta(Lite,RS485いずれも可)
 - Opta拡張モジュール D1608S(Solid State リレー、8ch)を1台接続
+- Windows PCとOptaをつなぐスイッチングハブorWi-Fiルーター及びLANケーブル
 
 ## 必要なライブラリ(Arduino IDE)
 
