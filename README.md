@@ -14,10 +14,9 @@ BVE (BveEX_20251119)  --MQTT-->  Arduino Opta (本スケッチ)  --I2C-->  拡�
 
 ## 必要なハードウェア
 
+- BveをプレイするWindows PC([mosquitto](https://mosquitto.org/download/)のインストールによるMQTTブローカーの構築が必要です)。[Node-RED Dashboardの構築](https://github.com/yukinoshitaworks/Bve_Node-RED_Dashboard)も併せてご参照ください。
 - Arduino Opta(Ethernet対応モデル)
 - Opta拡張モジュール D1608S(Solid State リレー、8ch)を1台接続
-- Opta と同じネットワークに MQTT ブローカー(例: Mosquitto)
-  - [Bve_MQTT_IO](https://github.com/yukinoshitaworks/Bve_MQTT_IO) 側の `MqttHost`/`MqttPort` と同じブローカーを指す
 
 ## 必要なライブラリ(Arduino IDE)
 
@@ -35,7 +34,7 @@ Arduino IDE のボードマネージャで **Arduino Mbed OS Opta Boards** を�
 ```cpp
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01};  // Opta自身のMACアドレス(重複しないもの)
 IPAddress ip(192, 168, 11, 6);                       // Opta自身の固定IP
-IPAddress broker(192, 168, 11, 2);                    // MQTTブローカーのIP
+IPAddress broker(192, 168, 11, 2);                    // MQTTブローカー(BveをプレイするPC)のIP
 ```
 
 MQTT接続時のクライアントID(`Opta001`)は `reconnect()` 内で固定です。複数台の Opta を同一ブローカーに接続する場合は、台数分ユニークな値に変更してください。
