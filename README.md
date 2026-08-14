@@ -1,21 +1,21 @@
 # Bve_MQTT_arduino_opta
 
-[Bve_MQTT_IO](https://github.com/yukinoshitaworks/Bve_MQTT_IO)(BVE Trainsim 用 MQTT 連携プラグイン)が発行する MQTT トピックを購読し、**Arduino Opta** + 拡張モジュール(D1608S / Solid State)の物理リレーへ反映するファームウェアです。BVE の運転状況(ATS-P表示灯・知らせ灯・警笛/ブレーキ音など)を、実物のパイロットランプやリレー出力として再現します。
+[Bve_MQTT_IO](https://github.com/yukinoshitaworks/Bve_MQTT_IO)(BVE Trainsim 用 MQTT 連携プラグイン)が発行する MQTT トピックを購読し、**Arduino Opta** + 拡張モジュール(D1608S / Solid State)の物理リレーへ反映するファームウェアです。BVE の運転状況(ATS-P表示灯・知らせ灯など)を、実物のパイロットランプやリレー出力として再現します。
 
 ## 対応関係
 
-BVE(BveEX_20251119 プラグイン)→ MQTT → 本スケッチ → Opta のリレー、という流れです。
+BVE(Bve_MQTT_IOプラグイン)→ MQTT → 本スケッチ → Opta のリレーという流れです。
 
 ```
-BVE (BveEX_20251119)  --MQTT-->  Arduino Opta (本スケッチ)  --I2C-->  拡張モジュール D1608S
+BVE (Bve_MQTT_IOプラグイン)  --MQTT-->  Arduino Opta (本スケッチ)  --I2C-->  拡張モジュール D1608S
                                         |
                                         +--> 本体リレー D0/D1/D2
 ```
 
 ## 必要なハードウェア
 
-- BveをプレイするWindows PC([mosquitto](https://mosquitto.org/download/)のインストールによるMQTTブローカーの構築が必要です)。[Node-RED Dashboardの構築](https://github.com/yukinoshitaworks/Bve_Node-RED_Dashboard)も併せてご参照ください。
-- Arduino Opta(Ethernet対応モデル)
+- BveをプレイするWindows PC([mosquitto](https://mosquitto.org/download/)のインストールによるMQTTブローカーの構築が必要です)。[Node-RED Dashboard](https://github.com/yukinoshitaworks/Bve_Node-RED_Dashboard)の構築も併せてご参照ください。
+- Arduino Opta(Lite,RS485いずれも可)
 - Opta拡張モジュール D1608S(Solid State リレー、8ch)を1台接続
 
 ## 必要なライブラリ(Arduino IDE)
@@ -41,7 +41,7 @@ MQTT接続時のクライアントID(`Opta001`)は `reconnect()` 内で固定で
 
 ## MQTTトピックとリレー出力の対応
 
-### `bve/panel`(JSON配列)→ 拡張モジュール(D1608S)ch0-5 + ch6(変化パルス)
+### `bve/panel`(JSON配列)→ 拡張モジュール(D1608S)ch0-5 + ch6(現示ベル)
 
 | panel配列インデックス | 意味 | 拡張モジュール出力ch |
 |---|---|---|
@@ -53,7 +53,7 @@ MQTT接続時のクライアントID(`Opta001`)は `reconnect()` 内で固定で
 | `[7]` | 故障 | ch5 |
 
 各値は `1` で ON、それ以外で OFF として拡張モジュールのリレーに反映されます。
-上記6chのいずれかが変化した瞬間、**ch6 が1秒間だけ ON になるパルス出力**(状態変化の検出・記録用トリガ)を行います。
+上記6chのいずれかが変化した瞬間、**ch6 が1秒間だけ ON になるパルス出力**(現示ベル鳴動)を行います。
 
 ### `bve/pilot`(単一値)→ Opta本体リレー1(D0)
 
@@ -63,8 +63,8 @@ MQTT接続時のクライアントID(`Opta001`)は `reconnect()` 内で固定で
 
 | sound配列インデックス | 出力先 |
 |---|---|
-| `[0]` | 本体リレー2(D1) |
-| `[1]` | 本体リレー3(D2) |
+| `[0]` | ATS-Sxベル(D1) |
+| `[1]` | ATS-Sxチャイム(D2) |
 
 値が `-1` のとき ON、それ以外(`-10000` など無音相当値)のとき OFF。本体LED `LED_D1`/`LED_D2` も連動します。
 
@@ -74,7 +74,7 @@ MQTT接続時のクライアントID(`Opta001`)は `reconnect()` 内で固定で
 
 ### `opta/input`(Publish)
 
-1秒間隔でアナログ入力 `A0` の値を Publish します(現状は未使用の予約的な出力です。外部スイッチ等をBVE側へ戻す用途を想定)。
+1秒間隔でアナログ入力 `A0` の値を Publish します(現状は未使用。マスコンや車掌スイッチなどの入力をBVE側へ戻す用途を想定)。
 
 ## 動作確認
 
